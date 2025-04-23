@@ -1,55 +1,64 @@
 # PhishKiller
 
-**PhishKiller** is a phishing threat analyzer built with Python and Streamlit. It helps detect phishing attempts by analyzing suspicious URLs and email headers.
+[![Python](https://img.shields.io/badge/Python-black?style=flat-square&logo=python&logoColor=white)](https://www.python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-black?style=flat-square&logo=streamlit&logoColor=white)](https://streamlit.io)
+[![MIT License](https://img.shields.io/badge/License-MIT-black?style=flat-square)](LICENSE)
+[![Made by Nessa Kodo](https://img.shields.io/badge/Made%20by-Nessa%20Kodo-black?style=flat-square)](https://nessakodo.com)
+
+**PhishKiller** is a terminal-inspired phishing threat analyzer built with Python and Streamlit. It detects suspicious characteristics in URLs and raw email headers using heuristic rules, scoring logic, and blacklist integration.
+
+> Deployed at: [phishkiller.streamlit.app](https://phishkiller.streamlit.app) *(Demo instance)*
 
 ## Features
 
-- URL analysis with phishing heuristics and blacklist checking
+- Real-time URL analysis with heuristic scoring and blacklist lookup
 - Email header parsing for SPF/DMARC failure detection
-- Streamlit web interface for clean and interactive analysis
-- Downloadable reports in JSON and TXT formats
+- Streamlit interface with mobile-friendly retro terminal theme
+- Report downloads in JSON and plain text formats
 
-## Requirements
+## Planned Enhancements
 
+- Real-time Discord webhook alerts
+- Signature matching engine with YAML config
+- Enriched threat intelligence feeds integration
+- CLI version with terminal export mode
+- Public threat database and REST API
+
+---
+
+## Quick Start
+
+**Requirements:**
 - Python 3.8+
-- Streamlit
-- Requests
-
-Install dependencies:
+- `streamlit`, `requests`
 
 ```bash
 pip install -r requirements.txt
-```
-
-## Usage
-
-Start the app locally:
-
-```bash
 streamlit run app.py
 ```
 
-Once running:
+1. Paste a suspicious URL into the input box.
+2. Upload a raw `.txt` email header.
+3. View threat level and detection reasons.
+4. Download your analysis report.
 
-1. Paste a suspicious URL into the form
-2. Upload a `.txt` email header file
-3. View real-time analysis results
-4. Download the report for your records
+---
 
-## Sample Header
+## Sample Email Header
 
-*You can find the example .txt files used below in the `/test_samples` folder*
+You can find example `.txt` files under `/test_samples`.
+
 ```txt
 Received: from suspicioushost.net (unknown [185.245.86.10])
 Received-SPF: fail (example.com: domain of attacker@evilsite.ru does not designate 185.245.86.10 as permitted sender)
 Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 ```
 
+---
+
 ## Test Cases
 
-*Use the examples below in PhishKiller's URL input to test its detection capabilities. These URLs mimic known phishing patterns or contain synthetic traits used in real-world attacks.*
-
-> **Warning**: These URLs are for testing only. Do **not** click or visit them.
+*Use the examples below in PhishKiller to simulate detection capabilities.*
 
 | Suspicious URL                             | Why It’s Suspicious                              |
 |--------------------------------------------|--------------------------------------------------|
@@ -61,43 +70,33 @@ Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 | `http://198.167.0.245/login?user=me`       | Bare IP address with login query                 |
 | `http://ebay.account.confirm-id908.com`    | Subdomain overload + spoofed brand               |
 
-### What These URLs Trigger
-
-- Heuristic pattern matching (e.g., `login`, `verify`, `reset`)
-- Subdomain count detection
-- Numeric slug identification
-- Brand impersonation checks
-- Optional OpenPhish blacklist validation (if connected)
+### Detection Criteria:
+- Keyword heuristics (`login`, `reset`, `verify`, etc.)
+- Spoofed brand detection (`paypal`, `apple`, etc.)
+- Subdomain complexity / URL structure
+- Numeric pattern detection
+- OpenPhish blacklist fallback (if available)
 
 ---
 
-### Interface Previews
+## Interface Previews
 
-#### URL Input & Risk Detection
-
-> Example showing detection of phishing-like patterns and spoofed branding in a submitted URL.
-
+### URL Input & Risk Detection
+> Shows real-time analysis output and why the site is flagged.
 ![URL analysis results with threat level and reasoning](/assets/screenshots/url.png)
 
----
-
-#### Email Header Analyzer
-
-> Example of parsed email headers, extracted IPs, and SPF/DMARC failure detection.
-
+### Email Header Analyzer
+> Parses raw email headers, extracts IPs, flags SPF/DMARC issues.
 ![Email header analysis with SPF failure output](/assets/screenshots/email.png)
 
----
-
-### Report Exporting
-
-> Users can download full analysis reports as JSON or plain text for sharing or documentation.
-
-#### JSON Example Report Output
+### Report Export
+> Download results as JSON or plain text.
 ![JSON-formatted threat data](/assets/screenshots/json.png)
+
+---
 
 ## Credits
 
-*Built with love by Nessa Kodo for cybersecurity education and operational defense learning.*
+Created and maintained by [Nessa Kodo](https://nessakodo.com) — for security education and operational defense tooling.
 
----
+MIT License.
