@@ -1,97 +1,119 @@
-# analyzer.py - Core phishing detection logic with scoring and signature heuristics
+import streamlit as st
+from classifier import classify_symptom
+from datetime import datetime
+import pytz
 
-import re
-import requests
-from urllib.parse import urlparse
+# Set up the app appearance and metadata
+st.set_page_config(
+    page_title="CareSense – AI Symptom Assistant",
+    layout="centered",
+    initial_sidebar_state="collapsed"
+)
 
-# --- Signature Rules ---
-signatures = {
-    "url_keywords": ["secure", "login", "verify", "update", "account", "reset", "support"],
-    "spoofed_brands": ["apple", "paypal", "google", "bank", "chase"],
-    "ip_blocks": ["185.", "194.", "46.23."],
-    "spf_dmarc_failures": True
-}
+# Add dark mode styling with a clean, calming look
+st.markdown("""
+    <style>
+        html, body, .reportview-container, .main {
+            background-color: #0e1117;
+            color: #e1e1e1;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .title {
+            color: #38bdf8;
+            font-size: 32px;
+            font-weight: 700;
+            padding-top: 10px;
+        }
+        .subtitle {
+            color: #cbd5e1;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background-color: #1a1d23;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            border: 1px solid #2f343f;
+        }
+        .urgency-high {
+            color: #f87171;
+            font-weight: bold;
+        }
+        .urgency-medium {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+        .urgency-low {
+            color: #34d399;
+            font-weight: bold;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
-# --- OpenPhish Feed ---
-FREE_BLACKLIST = "https://openphish.com/feed.txt"
+# Logo and intro
+st.image("assets/logo/caresense_logo_dark.png", width=180)
+st.markdown("<div class='title'>CareSense</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Your AI-powered symptom assistant. Confidential, smart, and caring.</div>", unsafe_allow_html=True)
 
-# Checks if a URL is found in the OpenPhish blacklist
-def is_blacklisted(url):
-    try:
-        response = requests.get(FREE_BLACKLIST, timeout=10)
-        if response.status_code == 200:
-            blacklist = response.text.splitlines()
-            return any(url.startswith(bad) for bad in blacklist)
-    except Exception:
-        return False
-    return False
+# Let user input their symptoms
+symptom_input = st.text_area("Describe your symptoms:", height=150, placeholder="e.g. I have a burning chest pain that gets worse after eating...")
 
-# Heuristic scoring function that returns a threat score and reasoning
-def score_suspicious_url(url):
-    parsed = urlparse(url)
-    domain = parsed.netloc.lower()
-    full_url = url.lower()
+# Get current time for logs
+timestamp = datetime.now(pytz.timezone("US/Mountain")).strftime("%b %d, %Y at %I:%M %p")
 
-    score = 0
-    reasons = []
+# Classify symptoms and log result
+if st.button("Check Urgency"):
+    if symptom_input.strip():
+        result = classify_symptom(symptom_input)
 
-    # Subdomain overload
-    if len(domain.split('.')) > 3:
-        score += 1
-        reasons.append("Too many subdomains")
+        if "logs" not in st.session_state:
+            st.session_state.logs = []
 
-    # Encoded characters or suspicious symbols
-    if any(char in url for char in ['@', '%', '&', '$']):
-        score += 1
-        reasons.append("Contains encoded or obfuscation characters")
+        st.session_state.logs.append({
+            "text": symptom_input,
+            "timestamp": timestamp,
+            "urgency": result["urgency"]
+        })
 
-    # Long number strings (e.g., account reset links)
-    if re.search(r'\d{6,}', url):
-        score += 1
-        reasons.append("Contains long numeric pattern")
+        # Style urgency with colors
+        urgency_class = {
+            "High Urgency": "urgency-high",
+            "Medium Urgency": "urgency-medium",
+            "Low Urgency": "urgency-low"
+        }[result["urgency"]]
 
-    # Keyword matches (e.g., login, reset, update)
-    for keyword in signatures["url_keywords"]:
-        if keyword in full_url:
-            score += 1
-            reasons.append(f"Keyword match: '{keyword}'")
-            break
+        # Show results
+        st.markdown(f"<div class='card'>", unsafe_allow_html=True)
+        st.markdown(f"<h4>Assessment Result</h4>", unsafe_allow_html=True)
+        st.markdown(f"<b>Urgency:</b> <span class='{urgency_class}'>{result['urgency']}</span> ({round(result['confidence'], 2)}%)", unsafe_allow_html=True)
+        st.markdown(f"<b>Recommended Care:</b> {result['care_type']}")
+        st.markdown(f"<b>Suggested Specialty:</b> {result['specialty']}")
 
-    # Spoofed brand names in the domain
-    for brand in signatures["spoofed_brands"]:
-        if brand in domain:
-            score += 1
-            reasons.append(f"Brand spoofing detected: '{brand}'")
-            break
+        # Add insight if symptom is recurring
+        if any(log["text"] == symptom_input and log["urgency"] != "Low Urgency" for log in st.session_state.logs[:-1]):
+            st.markdown("<hr>", unsafe_allow_html=True)
+            st.markdown("**CareSense Insight:** This symptom has been reported more than once. Consider discussing this pattern with a provider.", unsafe_allow_html=True)
 
-    return score, reasons
-
-# Email header analysis
-def analyze_email_header(header_text):
-    lines = header_text.split('\n')
-    received_lines = [l for l in lines if l.lower().startswith("received")]
-    ip_matches = re.findall(r'[0-9]+(?:\.[0-9]+){3}', '\n'.join(received_lines))
-
-    spf_fails = [l for l in lines if "spf=fail" in l.lower() or "dmarc=fail" in l.lower()]
-
-    return {
-        "ips": list(set(ip_matches)),
-        "spf_dmarc_failures": spf_fails
-    }
-
-# URL analyzer: combines blacklist + signature score
-def analyze_url(url):
-    if is_blacklisted(url):
-        return "Malicious", ["URL found in phishing blacklist"]
-
-    score, reasons = score_suspicious_url(url)
-    if score >= 3:
-        return "Malicious", reasons
-    elif score >= 1:
-        return "Suspicious", reasons
+        st.markdown("</div>", unsafe_allow_html=True)
     else:
-        return "Safe", reasons
+        st.warning("Please enter a symptom description.")
 
-# Header dispatcher
-def analyze_header_text(text):
-    return analyze_email_header(text)
+# Show recent symptom history
+if "logs" in st.session_state and st.session_state.logs:
+    st.markdown("<h4 style='margin-top: 40px;'>Recent Symptom History</h4>", unsafe_allow_html=True)
+    for entry in reversed(st.session_state.logs[-5:]):
+        color = {
+            "High Urgency": "#f87171",
+            "Medium Urgency": "#fbbf24",
+            "Low Urgency": "#34d399"
+        }[entry["urgency"]]
+        st.markdown(
+            f"<div style='color:{color}; padding: 4px 0;'>{entry['timestamp']} — {entry['text']} [{entry['urgency']}]</div>",
+            unsafe_allow_html=True
+        )
+
+# Footer disclaimer
+st.markdown("""---  
+*This app is for educational and experimental use only. Always consult a licensed physician before making medical decisions.*
+""")

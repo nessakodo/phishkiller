@@ -85,13 +85,14 @@ Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 > Shows real-time analysis output and why the site is flagged.
 ![URL analysis results with threat level and reasoning](/assets/screenshots/url.png)
 
-### Email Header Analyzer
-> Parses raw email headers, extracts IPs, flags SPF/DMARC issues.
-![Email header analysis with SPF failure output](/assets/screenshots/email.png)
-
 ### Report Export
 > Download results as JSON or plain text.
 ![JSON-formatted threat data](/assets/screenshots/json.png)
+
+
+### Email Header Analyzer
+> Parses raw email headers, extracts IPs, flags SPF/DMARC issues.
+![Email header analysis with SPF failure output](/assets/screenshots/email.png)
 
 ---
 
