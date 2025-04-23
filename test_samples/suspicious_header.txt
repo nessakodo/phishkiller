@@ -1,0 +1,3 @@
+Received: from suspicioushost.net (unknown [185.245.86.10])
+Received-SPF: fail (example.com: domain of attacker@evilsite.ru does not designate 185.245.86.10 as permitted sender)
+Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
