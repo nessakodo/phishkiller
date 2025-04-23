@@ -1,72 +1,97 @@
-# analyzer.py - Core phishing threat detection logic for PhishKiller
-# Written by Nessa Kodo
+# analyzer.py - Core phishing detection logic with scoring and signature heuristics
+
 import re
 import requests
 from urllib.parse import urlparse
 
-# Signature-based rule set to enrich threat matching
+# --- Signature Rules ---
 signatures = {
-    "url_keywords": ["secure", "login", "verify", "update", "account", "reset"],
-    "ip_blocks": ["185.", "194.", "46.23."],  # Known bad IP prefixes
-    "spf_dmarc_failures": True  # Trigger alert if SPF or DMARC fails
+    "url_keywords": ["secure", "login", "verify", "update", "account", "reset", "support"],
+    "spoofed_brands": ["apple", "paypal", "google", "bank", "chase"],
+    "ip_blocks": ["185.", "194.", "46.23."],
+    "spf_dmarc_failures": True
 }
 
-# Free open-source phishing blacklist feed from OpenPhish
+# --- OpenPhish Feed ---
 FREE_BLACKLIST = "https://openphish.com/feed.txt"
 
-# -- Blacklist Check --
-# Verifies whether a given URL appears on the known phishing blacklist.
+# Checks if a URL is found in the OpenPhish blacklist
 def is_blacklisted(url):
     try:
         response = requests.get(FREE_BLACKLIST, timeout=10)
         if response.status_code == 200:
             blacklist = response.text.splitlines()
             return any(url.startswith(bad) for bad in blacklist)
-    except Exception as e:
-        # In production, log the error (e.g., to Sentry or Streamlit's error log)
+    except Exception:
         return False
     return False
 
-# -- URL Suspicion Heuristics --
-# Looks for red flags in a URL’s structure or patterns
-def is_suspicious_url(url):
+# Heuristic scoring function that returns a threat score and reasoning
+def score_suspicious_url(url):
     parsed = urlparse(url)
-    domain = parsed.netloc
+    domain = parsed.netloc.lower()
+    full_url = url.lower()
 
-    suspicious_signals = [
-        len(domain.split('.')) > 3,  # Too many subdomains (e.g., phishing.fake.example.com)
-        any(char in url for char in ['@', '%', '&', '$']),  # Encoded characters often used to mask links
-        re.search(r'\d{6,}', url),  # Long strings of numbers
-        re.search(r'(login|verify|secure|account)', url, re.IGNORECASE)  # Social engineering keywords
-    ]
-    return any(suspicious_signals)
+    score = 0
+    reasons = []
 
-# -- Email Header Analysis --
-# Extracts metadata from email headers including IPs and failed authentication attempts
+    # Subdomain overload
+    if len(domain.split('.')) > 3:
+        score += 1
+        reasons.append("Too many subdomains")
+
+    # Encoded characters or suspicious symbols
+    if any(char in url for char in ['@', '%', '&', '$']):
+        score += 1
+        reasons.append("Contains encoded or obfuscation characters")
+
+    # Long number strings (e.g., account reset links)
+    if re.search(r'\d{6,}', url):
+        score += 1
+        reasons.append("Contains long numeric pattern")
+
+    # Keyword matches (e.g., login, reset, update)
+    for keyword in signatures["url_keywords"]:
+        if keyword in full_url:
+            score += 1
+            reasons.append(f"Keyword match: '{keyword}'")
+            break
+
+    # Spoofed brand names in the domain
+    for brand in signatures["spoofed_brands"]:
+        if brand in domain:
+            score += 1
+            reasons.append(f"Brand spoofing detected: '{brand}'")
+            break
+
+    return score, reasons
+
+# Email header analysis
 def analyze_email_header(header_text):
     lines = header_text.split('\n')
     received_lines = [l for l in lines if l.lower().startswith("received")]
-    
-    # Collect all IP addresses in 'Received' lines
     ip_matches = re.findall(r'[0-9]+(?:\.[0-9]+){3}', '\n'.join(received_lines))
 
-    # Detect SPF and DMARC failures
     spf_fails = [l for l in lines if "spf=fail" in l.lower() or "dmarc=fail" in l.lower()]
-    
+
     return {
         "ips": list(set(ip_matches)),
         "spf_dmarc_failures": spf_fails
     }
 
-# -- Main URL Dispatcher --
+# URL analyzer: combines blacklist + signature score
 def analyze_url(url):
     if is_blacklisted(url):
-        return "Malicious: Found in phishing blacklist"
-    elif is_suspicious_url(url):
-        return "Suspicious: Unusual structure or keywords detected"
-    else:
-        return "Likely Safe: No immediate red flags"
+        return "Malicious", ["URL found in phishing blacklist"]
 
-# -- Dispatcher for email header text input --
+    score, reasons = score_suspicious_url(url)
+    if score >= 3:
+        return "Malicious", reasons
+    elif score >= 1:
+        return "Suspicious", reasons
+    else:
+        return "Safe", reasons
+
+# Header dispatcher
 def analyze_header_text(text):
     return analyze_email_header(text)

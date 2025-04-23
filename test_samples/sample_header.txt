@@ -1,3 +1,0 @@
-Received: from suspicioushost.com (unknown [194.25.1.1])
-Received-SPF: fail (google.com: domain of attacker@badmail.ru does not designate 194.25.1.1 as permitted sender)
-Authentication-Results: dmarc=fail (p=REJECT) header.from=badmail.ru

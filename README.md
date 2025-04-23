@@ -38,6 +38,7 @@ Once running:
 
 ## Sample Header
 
+*You can find the example .txt files used below in the `/test_samples` folder*
 ```txt
 Received: from suspicioushost.net (unknown [185.245.86.10])
 Received-SPF: fail (example.com: domain of attacker@evilsite.ru does not designate 185.245.86.10 as permitted sender)
@@ -46,7 +47,9 @@ Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 
 ## Test Cases
 
-Use the examples below in PhishKiller's URL input to test its detection capabilities. These URLs are known phishing patterns or synthetic examples. **Do not click them.**
+*Use the examples below in PhishKiller's URL input to test its detection capabilities. These URLs mimic known phishing patterns or contain synthetic traits used in real-world attacks.*
+
+> **Warning**: These URLs are for testing only. Do **not** click or visit them.
 
 | Suspicious URL                             | Why It’s Suspicious                              |
 |--------------------------------------------|--------------------------------------------------|
@@ -58,15 +61,43 @@ Use the examples below in PhishKiller's URL input to test its detection capabili
 | `http://198.167.0.245/login?user=me`       | Bare IP address with login query                 |
 | `http://ebay.account.confirm-id908.com`    | Subdomain overload + spoofed brand               |
 
-### These are flagged based on:
-- Heuristic pattern matching (e.g., `login`, `verify`)
-- Subdomain count
-- Numeric slugs
-- Optional OpenPhish blacklist (if live)
+### What These URLs Trigger
 
+- Heuristic pattern matching (e.g., `login`, `verify`, `reset`)
+- Subdomain count detection
+- Numeric slug identification
+- Brand impersonation checks
+- Optional OpenPhish blacklist validation (if connected)
+
+---
+
+### Interface Previews
+
+#### URL Input & Risk Detection
+
+> Example showing detection of phishing-like patterns and spoofed branding in a submitted URL.
+
+![URL analysis results with threat level and reasoning](/assets/screenshots/url.png)
+
+---
+
+#### Email Header Analyzer
+
+> Example of parsed email headers, extracted IPs, and SPF/DMARC failure detection.
+
+![Email header analysis with SPF failure output](/assets/screenshots/email.png)
+
+---
+
+### Report Exporting
+
+> Users can download full analysis reports as JSON or plain text for sharing or documentation.
+
+#### JSON Example Report Output
+![JSON-formatted threat data](/assets/screenshots/json.png)
 
 ## Credits
 
-Built with love by Nessa Kodo for cybersecurity education and operational defense learning.
+*Built with love by Nessa Kodo for cybersecurity education and operational defense learning.*
 
 ---

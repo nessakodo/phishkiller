@@ -1,0 +1,8 @@
+Received: from mail.example.com (mail.example.com. [203.0.113.25])
+        by mx.google.com with ESMTPS id a7si1293040qkf.13.2025.04.22.23.45.12
+        for <youraddress@example.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Apr 2025 23:45:12 -0600 (MDT)
+Authentication-Results: mx.google.com;
+       spf=pass (google.com: domain of user@example.com designates 203.0.113.25 as permitted sender) smtp.mailfrom=user@example.com;
+       dmarc=pass (p=REJECT sp=REJECT dis=NONE) header.from=example.com
