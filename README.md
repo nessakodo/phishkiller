@@ -1,104 +1,148 @@
-Alright — let’s break this into **two pieces** for you cleanly:
-
 # 𝘗𝘩𝘪𝘴𝘩𝘒𝘪𝘭𝘭𝘦𝘳
 
 ![Version](https://img.shields.io/badge/Version-v1-000000?style=for-the-badge&logo=github&logoColor=white)
-[![Live](https://img.shields.io/badge/Live-Streamlit_App-000000?style=for-the-badge&logo=streamlit&logoColor=white)](https://phishkiller.streamlit.app)
+
 [![Python](https://img.shields.io/badge/Python-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
+[![Streamlit](https://img.shields.io/badge/Streamlit-000000?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
 [![MIT License](https://img.shields.io/badge/License-MIT-000000?style=for-the-badge)](LICENSE)
 [![Made by Nessa Kodo](https://img.shields.io/badge/Made%20by-Nessa%20Kodo-000000?style=for-the-badge)](https://nessakodo.com)
 
 ---
 
-## 𝘛𝘦𝘳𝘮𝘪𝘯𝘢𝘭-𝘪𝘯𝘴𝘱𝘪𝘳𝘦𝘥 𝘱𝘩𝘪𝘴𝘩𝘪𝘯𝘨 𝘥𝘦𝘵𝘦𝘤𝘵𝘪𝘰𝘯 𝘢𝘯𝘢𝘭𝘺𝘻𝘦𝘳 𝘸𝘪𝘵𝘩 𝘳𝘦𝘢𝘭-𝘵𝘪𝘮𝘦 𝘴𝘤𝘰𝘳𝘪𝘯𝘨.
+## 𝘛𝘦𝘳𝘮𝘪𝘯𝘢𝘭-𝘪𝘯𝘴𝘱𝘪𝘳𝘦𝘥 𝘗𝘩𝘪𝘴𝘩𝘪𝘯𝘨 𝘈𝘯𝘢𝘭𝘺𝘻𝘦𝘳 𝘸𝘪𝘵𝘩 𝘙𝘦𝘢𝘭-𝘛𝘪𝘮𝘦 𝘚𝘤𝘰𝘳𝘪𝘯𝘨
 
-> **Live App:** [phishkiller.streamlit.app](https://phishkiller.streamlit.app)
+> **Live Demo**: [phishkiller.streamlit.app](https://phishkiller.streamlit.app)
+
+PhishKiller is a phishing threat detection tool designed to analyze suspicious URLs and raw email headers. It uses heuristic analysis, pattern matching, and blacklists to flag potential phishing attempts with detailed scoring.
 
 ---
 
 ## 𝘍𝘦𝘢𝘵𝘶𝘳𝘦𝘴
 
-- Real-time URL analysis with heuristic scoring
-- Email header parsing for SPF/DMARC failures
+- URL analysis with heuristic scoring
+- Email header parsing (SPF/DMARC detection)
 - Retro terminal-themed Streamlit UI
-- Report downloads in JSON and plain text formats
-
----
-
-## 𝘗𝘭𝘢𝘯𝘯𝘦𝘥 𝘌𝘯𝘩𝘢𝘯𝘤𝘦𝘮𝘦𝘯𝘵𝘴
-
-- Real-time Discord webhook alerts
-- Signature matching engine with YAML config
-- Threat intelligence feeds integration
-- CLI version with export mode
-- Public threat database and REST API
+- Report download (JSON and plain text formats)
+- Mobile responsive and cloud-deployable
 
 ---
 
 ## 𝘘𝘶𝘪𝘤𝘬 𝘚𝘵𝘢𝘳𝘵
 
 **Requirements:**
+
 - Python 3.8+
-- `streamlit`, `requests`
+- Streamlit
+- Requests
+
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
+```
+
+Run locally:
+
+```bash
 streamlit run app.py
+```
+
+---
+
+## 𝘋𝘦𝘱𝘭𝘰𝘺 𝘗𝘦𝘳𝘮𝘢𝘯𝘦𝘯𝘵𝘭𝘺
+
+PhishKiller can be permanently deployed on platforms like:
+
+- [Streamlit Community Cloud (free hosting)](https://streamlit.io/cloud)
+- [Railway](https://railway.app/)
+- [Render](https://render.com/)
+- [Fly.io](https://fly.io/)
+
+For deployment, create a `requirements.txt` and (optionally) a `Procfile`:
+
+Example `Procfile` (if needed):
+
+```
+web: streamlit run app.py
 ```
 
 ---
 
 ## 𝘚𝘢𝘮𝘱𝘭𝘦 𝘌𝘮𝘢𝘪𝘭 𝘏𝘦𝘢𝘥𝘦𝘳
 
-```txt
+Sample `.txt` files are available under `/test_samples`.
+
+Example:
+
+```text
 Received: from suspicioushost.net (unknown [185.245.86.10])
 Received-SPF: fail (example.com: domain of attacker@evilsite.ru does not designate 185.245.86.10 as permitted sender)
 Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 ```
 
-Find test samples under `/test_samples`.
-
 ---
 
 ## 𝘛𝘦𝘴𝘵 𝘊𝘢𝘴𝘦𝘴
 
-| Suspicious URL                             | Why It’s Suspicious                              |
-|:-------------------------------------------|:-------------------------------------------------|
-| `http://secure-login.mybank.co.uk`         | Banking domain spoof with login subdomain        |
-| `http://verify-user.info/login`            | Social engineering bait                         |
-| `http://paypal.com.userverify.ru`          | PayPal spoof with `.ru` domain                   |
-| `http://update-billing-946238.com`         | Numeric slug with billing keyword               |
-| `http://apple.support-reset.live`          | Fake Apple support portal                       |
-| `http://198.167.0.245/login?user=me`       | Bare IP address phishing link                   |
-| `http://ebay.account.confirm-id908.com`    | Brand spoofing via subdomain overload           |
+Use these examples to simulate detection capabilities:
 
----
+| Suspicious URL                             | Detection Reason                                  |
+|:-------------------------------------------|:--------------------------------------------------|
+| `http://secure-login.mybank.co.uk`         | Banking domain spoof with 'secure-login' keyword  |
+| `http://verify-user.info/login`            | Common social engineering bait                   |
+| `http://paypal.com.userverify.ru`          | PayPal brand spoof + Russian domain (.ru)         |
+| `http://update-billing-946238.com`         | Numeric pattern + 'billing' keyword               |
+| `http://apple.support-reset.live`          | Fake Apple support domain                        |
+| `http://198.167.0.245/login?user=me`       | Bare IP address exploitation                     |
+| `http://ebay.account.confirm-id908.com`    | Subdomain overload spoof                         |
 
-## 𝘋𝘦𝘵𝘦𝘤𝘵𝘪𝘰𝘯 𝘊𝘳𝘪𝘵𝘦𝘳𝘪𝘢
-
-- Heuristic keyword matching (`login`, `verify`, `reset`)
-- Brand spoof detection (`paypal`, `apple`)
-- Subdomain and URL structure complexity
-- Numeric slug pattern detection
-- Blacklist fallback (OpenPhish)
+**Detection criteria include:**
+- Keyword heuristics (`login`, `verify`, `reset`, etc.)
+- Brand spoof detection (`paypal`, `apple`, etc.)
+- Subdomain complexity analysis
+- Numeric slug patterns
+- OpenPhish blacklist matching (optional integration)
 
 ---
 
 ## 𝘐𝘯𝘵𝘦𝘳𝘧𝘢𝘤𝘦 𝘗𝘳𝘦𝘷𝘪𝘦𝘸𝘴
 
-**URL Input & Header Risk Detection:**
+### URL Analysis
 
-![URL Analysis Results](/assets/screenshots/url.png)
+Displays URL threat levels, detected phishing patterns, and reasons for flagging.
 
-**Email Header Analyzer:**
+![URL analysis results with threat level and reasoning](/assets/screenshots/url.png)
 
-![SPF Failure Analysis](/assets/screenshots/email.png)
+
+---
+
+### Email Header Analysis
+
+Parses uploaded email headers, extracts originating IP addresses, and detects SPF/DMARC authentication failures.
+
+![Email header analysis with SPF failure output](/assets/screenshots/email.png)
+
+---
+
+## 𝘗𝘭𝘢𝘯𝘯𝘦𝘥 𝘌𝘯𝘩𝘢𝘯𝘤𝘦𝘮𝘦𝘯𝘵𝘴
+
+- Webhook alerting to Discord channels
+- Signature-based matching with YAML configs
+- Integration with live threat intelligence feeds
+- Command-line interface (CLI) mode
+- Public phishing incident database with REST API
 
 ---
 
 ## 𝘊𝘳𝘦𝘥𝘪𝘵𝘴
 
-Created and maintained by [Nessa Kodo](https://nessakodo.com).  
-MIT License.
+Created and maintained by [Nessa Kodo](https://nessakodo.com)  
+Licensed under the MIT License.
 
 ---
+
+# 
+
+---
+
+### 𝘚𝘵𝘢𝘺 𝘢𝘭𝘦𝘳𝘵. 𝘚𝘵𝘢𝘺 𝘴𝘦𝘤𝘶𝘳𝘦.
