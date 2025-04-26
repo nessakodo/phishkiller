@@ -1,39 +1,60 @@
 # 𝘗𝘩𝘪𝘴𝘩𝘒𝘪𝘭𝘭𝘦𝘳
 
-![Version](https://img.shields.io/badge/Version-v1-000000?style=for-the-badge&logo=github&logoColor=white)
+![Version](https://img.shields.io/badge/Version-v2-000000?style=for-the-badge&logo=github&logoColor=white)
 
 [![Python](https://img.shields.io/badge/Python-000000?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org)
-[![Streamlit](https://img.shields.io/badge/Streamlit-000000?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io)
+[![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![MIT License](https://img.shields.io/badge/License-MIT-000000?style=for-the-badge)](LICENSE)
 [![Made by Nessa Kodo](https://img.shields.io/badge/Made%20by-Nessa%20Kodo-000000?style=for-the-badge)](https://nessakodo.com)
 
 ---
 
-## 𝘛𝘦𝘳𝘮𝘪𝘯𝘢𝘭-𝘪𝘯𝘴𝘱𝘪𝘳𝘦𝘥 𝘗𝘩𝘪𝘴𝘩𝘪𝘯𝘨 𝘈𝘯𝘢𝘭𝘺𝘻𝘦𝘳 𝘸𝘪𝘵𝘩 𝘙𝘦𝘢𝘭-𝘛𝘪𝘮𝘦 𝘚𝘤𝘰𝘳𝘪𝘯𝘨
+## 𝘜𝘱𝘥𝘢𝘵𝘦𝘴
 
-> **Live Demo**: [phishkiller.streamlit.app](https://phishkiller.streamlit.app)
+PhishKiller v2 represents a major upgrade:
 
-PhishKiller is a phishing threat detection tool designed to analyze suspicious URLs and raw email headers. It uses heuristic analysis, pattern matching, and blacklists to flag potential phishing attempts with detailed scoring.
+- Rebuilt from **Streamlit** ➔ **Flask Web Server**
+- **OCR** (Optical Character Recognition) added to extract email headers from screenshots (`.png`, `.jpg`)
+- **Fully modular**, **mobile responsive**, **hacker-themed UI** with polished UX
+- **Deployment ready** (Render, Railway, Fly.io)
+- **Faster** performance and scalable backend
+
+[![View Demo](https://img.shields.io/badge/View_Phiskiller_Demo-000000?style=for-the-badge&logo=githubpages&logoColor=white)](https://phishkiller.onrender.com)
 
 ---
 
 ## 𝘍𝘦𝘢𝘵𝘶𝘳𝘦𝘴
 
-- URL analysis with heuristic scoring
-- Email header parsing (SPF/DMARC detection)
-- Retro terminal-themed Streamlit UI
-- Report download (JSON and plain text formats)
-- Mobile responsive and cloud-deployable
+- Real-time phishing URL analysis with heuristic scoring
+- Email header parsing (text file or screenshot image OCR)
+- Retro-modern terminal UI (dark hacker theme)
+- Modular card layout (URL & Email separated cleanly)
+- Mobile-friendly and cloud-deployable
+- Download analysis reports (JSON/TXT) *(Planned)*
 
 ---
 
-## 𝘘𝘶𝘪𝘤𝘬 𝘚𝘵𝘢𝘳𝘵
+## 𝘝𝘦𝘳𝘴𝘪𝘰𝘯 𝘊𝘰𝘮𝘱𝘢𝘳𝘪𝘴𝘰𝘯
+
+| Feature | v1 (Streamlit) | v2 (Flask + OCR) |
+|:---|:---|:---|
+| UI | Streamlit app, full page | Modular Flask web app, centered |
+| Header Upload | Only `.txt` files | `.txt`, `.png`, `.jpg` with OCR |
+| Deployment | Streamlit Cloud | Render, Railway, Fly.io |
+| Design | Basic terminal feel | Hacker-modern, responsive |
+| Performance | Good for small demos | Faster, scalable |
+
+---
+
+## 𝘘𝘶𝘪𝘤𝘬 𝘚𝘵𝘢𝘳𝘵 (𝘓𝘰𝘤𝘢𝘭 𝘙𝘶𝘯)
 
 **Requirements:**
 
 - Python 3.8+
-- Streamlit
+- Flask
 - Requests
+- Pillow
+- Pytesseract
 
 Install dependencies:
 
@@ -44,35 +65,44 @@ pip install -r requirements.txt
 Run locally:
 
 ```bash
-streamlit run app.py
+python app.py
+```
+
+Visit:
+
+```
+http://localhost:8000
 ```
 
 ---
 
-## 𝘋𝘦𝘱𝘭𝘰𝘺 𝘗𝘦𝘳𝘮𝘢𝘯𝘦𝘯𝘵𝘭𝘺
+## 𝘋𝘦𝘱𝘭𝘰𝘺 𝘖𝘯𝘭𝘪𝘯𝘦
 
-PhishKiller can be permanently deployed on platforms like:
+PhishKiller v2 can be permanently hosted on:
 
-- [Streamlit Community Cloud (free hosting)](https://streamlit.io/cloud)
-- [Railway](https://railway.app/)
 - [Render](https://render.com/)
+- [Railway](https://railway.app/)
 - [Fly.io](https://fly.io/)
 
-For deployment, create a `requirements.txt` and (optionally) a `Procfile`:
+You need:
 
-Example `Procfile` (if needed):
+- `requirements.txt`
+- `Procfile`
+- GitHub Repository
+
+Example `Procfile`:
 
 ```
-web: streamlit run app.py
+web: gunicorn app:app
 ```
 
 ---
 
-## 𝘚𝘢𝘮𝘱𝘭𝘦 𝘌𝘮𝘢𝘪𝘭 𝘏𝘦𝘢𝘥𝘦𝘳
+## 𝘚𝘢𝘮𝘱𝘭𝘦 𝘜𝘗𝘓𝘖𝘈𝘋𝘚
 
-Sample `.txt` files are available under `/test_samples`.
+### 𝘛𝘦𝘹𝘵
 
-Example:
+Example `.txt`:
 
 ```text
 Received: from suspicioushost.net (unknown [185.245.86.10])
@@ -80,11 +110,17 @@ Received-SPF: fail (example.com: domain of attacker@evilsite.ru does not designa
 Authentication-Results: dmarc=fail (p=REJECT) header.from=evilsite.ru
 ```
 
+### 𝘚𝘤𝘳𝘦𝘦𝘯𝘴𝘩𝘰𝘵
+
+Example `.png`:
+
+![Sample Email OCR Screenshot](/assets/screenshots/email_ocr_example.png)
+
+*(Simulated screenshot for OCR extraction.)*
+
 ---
 
-## 𝘛𝘦𝘴𝘵 𝘊𝘢𝘴𝘦𝘴
-
-Use these examples to simulate detection capabilities:
+## 𝘛𝘦𝘴𝘵 𝘊𝘢𝘴𝘦𝘴 (𝘍𝘰𝘳 𝘜𝘙𝘓 𝘈𝘯𝘢𝘭𝘺𝘴𝘪𝘴)
 
 | Suspicious URL                             | Detection Reason                                  |
 |:-------------------------------------------|:--------------------------------------------------|
@@ -96,53 +132,49 @@ Use these examples to simulate detection capabilities:
 | `http://198.167.0.245/login?user=me`       | Bare IP address exploitation                     |
 | `http://ebay.account.confirm-id908.com`    | Subdomain overload spoof                         |
 
-**Detection criteria include:**
-- Keyword heuristics (`login`, `verify`, `reset`, etc.)
-- Brand spoof detection (`paypal`, `apple`, etc.)
-- Subdomain complexity analysis
-- Numeric slug patterns
-- OpenPhish blacklist matching (optional integration)
-
 ---
 
 ## 𝘐𝘯𝘵𝘦𝘳𝘧𝘢𝘤𝘦 𝘗𝘳𝘦𝘷𝘪𝘦𝘸𝘴
 
-### URL Analysis
+### URL Analysis Card
 
-Displays URL threat levels, detected phishing patterns, and reasons for flagging.
+Displays threat level and reason flags.
 
-![URL analysis results with threat level and reasoning](/assets/screenshots/url.png)
-
-
----
-
-### Email Header Analysis
-
-Parses uploaded email headers, extracts originating IP addresses, and detects SPF/DMARC authentication failures.
-
-![Email header analysis with SPF failure output](/assets/screenshots/email.png)
+![URL Analysis](/assets/screenshots/url_analysis.png)
 
 ---
 
-## 𝘗𝘭𝘢𝘯𝘯𝘦𝘥 𝘌𝘯𝘩𝘢𝘯𝘤𝘦𝘮𝘦𝘯𝘵𝘴
+### Email Header (Text or Image)
 
-- Webhook alerting to Discord channels
-- Signature-based matching with YAML configs
-- Integration with live threat intelligence feeds
-- Command-line interface (CLI) mode
-- Public phishing incident database with REST API
+Parses SPF/DMARC fails from text or OCR scanned images.
+
+![Header Analysis Card](/assets/screenshots/header_analysis.png)
+
+---
+
+## 𝘗𝘭𝘢𝘯𝘯𝘦𝘥 𝘌𝘯𝘩𝘢𝘯𝘤𝘦𝘮𝘦𝘯𝘵𝘴 (V2.5+)
+
+- Report download buttons (JSON, TXT)
+- Signature-based detection rules
+- Public phishing database API
+- CLI version
+- Webhook alerts (Discord, Slack)
+
+---
+
+## 𝘚𝘶𝘱𝘱𝘰𝘳𝘵 𝘵𝘩𝘦 𝘉𝘶𝘪𝘭𝘥
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy_Me_A_Coffee-000000?style=for-the-badge&logo=buy-me-a-coffee&logoColor=white)](https://www.buymeacoffee.com/nessakodo)
 
 ---
 
 ## 𝘊𝘳𝘦𝘥𝘪𝘵𝘴
 
+
 Created and maintained by [Nessa Kodo](https://nessakodo.com)  
 Licensed under the MIT License.
 
----
-
-# 
+### 𝘚𝘵𝘢𝘺 𝘷𝘪𝘨𝘪𝘭𝘢𝘯𝘵. 𝘚𝘵𝘢𝘺 𝘴𝘦𝘤𝘶𝘳𝘦.
 
 ---
 
-### 𝘚𝘵𝘢𝘺 𝘢𝘭𝘦𝘳𝘵. 𝘚𝘵𝘢𝘺 𝘴𝘦𝘤𝘶𝘳𝘦.

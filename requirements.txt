@@ -1,2 +1,5 @@
-streamlit
+flask
 requests
+gunicorn
+pytesseract
+pillow

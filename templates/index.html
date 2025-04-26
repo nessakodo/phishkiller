@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhishKiller - Phishing Threat Analyzer</title>
+
+  <!-- Hacker fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-green: #00ff88;
+      --secondary-green: #00e676;
+      --dark-bg: #0a0f14;
+      --card-bg: #12181f;
+      --accent: #55ff55;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: #c5f7c7;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 0.8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 2rem;
+      margin: 0;
+    }
+
+    .container {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+      max-width: 600px;
+      width: 100%;
+      margin-top: 20px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .logo-container {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .logo-image {
+      width: 90px;
+      height: auto;
+      margin-bottom: 0.5rem;
+      filter: drop-shadow(0 0 8px var(--primary-green));
+    }
+
+    .logo-text {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3.7rem;
+      color: var(--primary-green);
+      text-align: center;
+      text-shadow: 0 0 8px var(--primary-green);
+      letter-spacing: 2px;
+      margin: 0.5rem 0 1rem;
+    }
+
+    p.description {
+      text-align: center;
+      color: #88ffaa;
+      margin-bottom: 2rem;
+      font-size: 1.05rem;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    input[type="text"],
+    button {
+      padding: 14px;
+      border-radius: 10px;
+      background: #1c1c1c;
+      border: 1px solid var(--primary-green);
+      color: #c5f7c7;
+      font-size: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--secondary-green);
+      outline: none;
+      background-color: #1e2a2e;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .custom-file-upload {
+      background-color: #1f2833;
+      color: var(--accent);
+      padding: 14px;
+      border: 1px solid var(--primary-green);
+      border-radius: 10px;
+      display: inline-block;
+      cursor: pointer;
+      text-align: center;
+      font-size: 1rem;
+      font-family: 'Share Tech Mono', monospace;
+      transition: all 0.3s ease;
+    }
+
+    .custom-file-upload:hover {
+      background-color: #222b34;
+      border-color: var(--secondary-green);
+    }
+
+    button {
+      background-color: var(--primary-green);
+      color: #0b0c10;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: var(--secondary-green);
+    }
+
+    .card {
+      background: #161d25;
+      padding: 1.5rem;
+      border-radius: 14px;
+      margin-top: 2rem;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.1);
+      animation: fadeInUp 0.7s ease;
+    }
+
+    .card h2 {
+      color: var(--primary-green);
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      margin-bottom: 0.5rem;
+      padding-left: 1.2rem;
+      position: relative;
+    }
+
+    li::before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      color: var(--secondary-green);
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #55ff77;
+      opacity: 0.8;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 1.5rem;
+      }
+      .logo-text {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<div class="logo-container">
+  <img src="{{ url_for('static', filename='logo-symbol.png') }}" alt="PhishKiller Logo" class="logo-image">
+  <h1 class="logo-text">PHISHKILLER</h1>
+</div>
+
+
+
+  <div class="container">
+    <p class="description">Analyze suspicious URLs and phishing attempts.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+      <input type="text" name="url" placeholder="Enter a suspicious URL">
+
+      <input id="header-upload" type="file" name="header" accept=".txt,.png,.jpg,.jpeg" onchange="updateFileName(this)">
+      <label for="header-upload" class="custom-file-upload" id="file-label">
+        Upload Email Header (.txt, .png, .jpg)
+      </label>
+      
+      <script>
+        function updateFileName(input) {
+          const label = document.getElementById('file-label');
+          if (input.files.length > 0) {
+            label.innerText = `Attached: ${input.files[0].name}`;
+          } else {
+            label.innerText = 'Upload Email Header (.txt, .png, .jpg)';
+          }
+        }
+      </script>
+      
+      <button type="submit">Analyze</button>
+    </form>
+
+    {% if url_analysis %}
+    <div class="card">
+      <h2>URL Analysis</h2>
+      <p><strong>URL:</strong> {{ url_analysis.url }}</p>
+      <p><strong>Risk Level:</strong> {{ url_analysis.risk }}</p>
+      <p><strong>Reasons:</strong></p>
+      <ul>
+        {% for reason in url_analysis.reasons %}
+        <li>{{ reason }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    {% if header_analysis %}
+    <div class="card">
+      <h2>Email Header Analysis</h2>
+      <p><strong>IP Addresses Found:</strong> {{ header_analysis.ips | join(', ') }}</p>
+      <p><strong>SPF/DMARC Failures:</strong> {{ header_analysis.spf_dmarc_failures | join(', ') }}</p>
+    </div>
+    {% endif %}
+
+  </div>
+
+  <footer>
+    Built by Nessa Kodo
+  </footer>
+
+</body>
+</html>
