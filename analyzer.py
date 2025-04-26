@@ -25,8 +25,16 @@ def analyze_url(url):
     if "://" not in url or " " in url:
         reasons.append("Malformed URL structure")
 
-    if reasons:
-        risk_level = "High" if len(reasons) >= 3 else "Medium"
+    if not reasons:
+        reasons.append("No suspicious elements detected in URL")
+        risk_level = "Low"
+    else:
+        if len(reasons) >= 3:
+            risk_level = "High"
+        elif len(reasons) >= 2:
+            risk_level = "Medium"
+        else:
+            risk_level = "Low"
     
     return risk_level, reasons
 
@@ -40,9 +48,16 @@ def analyze_header_text(header_text):
 
     if re.search(spf_fail_pattern, header_text.lower()):
         spf_dmarc_failures.append("SPF failure detected")
+    else:
+        spf_dmarc_failures.append("SPF: None")
 
     if re.search(dmarc_fail_pattern, header_text.lower()):
         spf_dmarc_failures.append("DMARC failure detected")
+    else:
+        spf_dmarc_failures.append("DMARC: None")
+
+    if not ips and not any("failure" in failure.lower() for failure in spf_dmarc_failures):
+        spf_dmarc_failures.append("No suspicious elements detected in email headers")
 
     return {
         'ips': ips,

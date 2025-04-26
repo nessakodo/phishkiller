@@ -251,10 +251,20 @@
     {% if header_analysis %}
     <div class="card">
       <h2>Email Header Analysis</h2>
+    
+      {% if header_analysis.filename %}
+      <p><strong>File:</strong> {{ header_analysis.filename }}</p>
+      {% endif %}
+    
+      {% if header_analysis.ocr_error %}
+      <p style="color: red;"><strong>OCR Error:</strong> {{ header_analysis.ocr_error }}</p>
+      {% endif %}
+    
       <p><strong>IP Addresses Found:</strong> {{ header_analysis.ips | join(', ') }}</p>
       <p><strong>SPF/DMARC Failures:</strong> {{ header_analysis.spf_dmarc_failures | join(', ') }}</p>
     </div>
     {% endif %}
+    
 
   </div>
 

@@ -40,7 +40,7 @@ PhishKiller v2 represents a major upgrade:
 |:---|:---|:---|
 | UI | Streamlit app, full page | Modular Flask web app, centered |
 | Header Upload | Only `.txt` files | `.txt`, `.png`, `.jpg` with OCR |
-| Deployment | Streamlit Cloud | Render, Railway, Fly.io |
+| Deployment | Streamlit Cloud | Render |
 | Design | Basic terminal feel | Hacker-modern, responsive |
 | Performance | Good for small demos | Faster, scalable |
 
@@ -59,13 +59,13 @@ PhishKiller v2 represents a major upgrade:
 Install dependencies:
 
 ```bash
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 Run locally:
 
 ```bash
-python app.py
+python3 app.py
 ```
 
 Visit:
@@ -78,11 +78,9 @@ http://localhost:8000
 
 ## 𝘋𝘦𝘱𝘭𝘰𝘺 𝘖𝘯𝘭𝘪𝘯𝘦
 
-PhishKiller v2 can be permanently hosted on:
+PhishKiller v2 has been directly hosted on:
 
 - [Render](https://render.com/)
-- [Railway](https://railway.app/)
-- [Fly.io](https://fly.io/)
 
 You need:
 
@@ -121,6 +119,8 @@ Example `.png`:
 ---
 
 ## 𝘛𝘦𝘴𝘵 𝘊𝘢𝘴𝘦𝘴 (𝘍𝘰𝘳 𝘜𝘙𝘓 𝘈𝘯𝘢𝘭𝘺𝘴𝘪𝘴)
+
+*Do NOT click these, they are for testing purposes only.*
 
 | Suspicious URL                             | Detection Reason                                  |
 |:-------------------------------------------|:--------------------------------------------------|
