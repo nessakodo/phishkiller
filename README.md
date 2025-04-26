@@ -96,7 +96,7 @@ web: gunicorn app:app
 
 ---
 
-## 𝘚𝘢𝘮𝘱𝘭𝘦 𝘜𝘗𝘓𝘖𝘈𝘋𝘚
+## 𝘚𝘢𝘮𝘱𝘭𝘦 𝘜𝘱𝘭𝘰𝘢𝘥𝘴
 
 ### 𝘛𝘦𝘹𝘵
 
@@ -114,7 +114,7 @@ Example `.png`:
 
 ![Sample Email OCR Screenshot](/assets/screenshots/email_ocr_example.png)
 
-*(Simulated screenshot for OCR extraction.)*
+*(Simulated screenshot for OCR extraction, however real email headers will work.)*
 
 ---
 
