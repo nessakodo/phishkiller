@@ -3,6 +3,7 @@ from analyzer import analyze_url, analyze_header_text
 import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 import io
+import os
 
 # Check if running locally on Mac
 if os.getenv('RUNNING_IN_DOCKER') != '1':
