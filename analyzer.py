@@ -1,6 +1,11 @@
-# analyzer.py
-
 import re
+import os
+import pytesseract
+
+# Set tesseract command conditionally
+if os.getenv('RUNNING_IN_DOCKER') != '1':
+    pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
+
 
 def analyze_url(url):
     suspicious_keywords = ['login', 'verify', 'reset', 'secure', 'account', 'update', 'billing', 'confirm']

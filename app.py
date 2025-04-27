@@ -3,12 +3,7 @@ from analyzer import analyze_url, analyze_header_text
 import pytesseract
 from PIL import Image, ImageEnhance, ImageFilter
 import io
-import os
 
-# Check if running locally on Mac
-if os.getenv('RUNNING_IN_DOCKER') != '1':
-    # Only set this if running locally (Mac Homebrew install)
-    pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_here'  # Needed for flash messages
