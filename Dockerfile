@@ -23,3 +23,6 @@ EXPOSE 5000
 
 # Run your app
 CMD ["python", "app.py"]
+
+# Set the environment variable
+ENV RUNNING_IN_DOCKER=1

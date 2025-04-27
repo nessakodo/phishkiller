@@ -2,12 +2,15 @@ import re
 import os
 import pytesseract
 
-# Set tesseract command conditionally
-if os.getenv('RUNNING_IN_DOCKER') != '1':
+# Set correct tesseract path based on environment
+if os.getenv('RUNNING_IN_DOCKER') == '1':
+    # Inside Docker — tesseract is available system-wide
+    pass
+else:
+    # Local MacBook — set Homebrew path manually
     pytesseract.pytesseract.tesseract_cmd = '/opt/homebrew/bin/tesseract'
-
-
 def analyze_url(url):
+    pass
     suspicious_keywords = ['login', 'verify', 'reset', 'secure', 'account', 'update', 'billing', 'confirm']
     suspicious_domains = ['paypal', 'apple', 'bank', 'secure', 'signin']
     risk_level = "Low"
@@ -44,6 +47,7 @@ def analyze_url(url):
     return risk_level, reasons
 
 def analyze_header_text(header_text):
+    pass
     ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
     spf_fail_pattern = r"spf=fail"
     dmarc_fail_pattern = r"dmarc=fail"
